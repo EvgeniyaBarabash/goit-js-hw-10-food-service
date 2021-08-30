@@ -1,18 +1,33 @@
 import refs from './refs.js';
 const{foodList, themeInput, body}=refs;
 
-themeInput.addEventListener('change', changeTheme);
 const Theme = {
     LIGHT: 'light-theme',
     DARK: 'dark-theme',
   };
+const{LIGHT, DARK}=Theme;
 
-function changeTheme(e){
-   body.setAttribute('class', body.classList.contains(Theme.DARK)?Theme.LIGHT:Theme.DARK);
-   localStorage.setItem('theme', body.classList.value);
+themeInput.addEventListener('change', switchTheme);
+
+function switchTheme(){
+  if(themeInput.checked){
+ body.classList.add(DARK)
+    body.classList.remove(LIGHT)
+  }else{
+    body.classList.remove(DARK)
+    body.classList.add(LIGHT)
+  }
+  localStorage.setItem('theme', body.classList.value)
+};
+
+function onSwitcherChange(){
+  const userTheme = localStorage.getItem('theme');
+  if(userTheme){
+   body.classList.add(userTheme)
+   if (userTheme === DARK) {
+       themeInput.checked = true;
+      }
+  }
+
 }
-function currentTheme(e){
-    body.setAttribute('class', localStorage.getItem('theme')===null?Theme.LIGHT:localStorage.getItem('theme'));
-    if(localStorage.getItem('theme')===Theme.DARK){themeInput.checked = 'true'}
-}
-currentTheme();
+onSwitcherChange()
